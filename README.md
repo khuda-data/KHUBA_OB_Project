@@ -8,16 +8,16 @@
 
 ## 주요 기능 (Key Features)
 
-1. ** 지능형 지역 선택 (Interactive Map) **
+1. **지능형 지역 선택 (Interactive Map)**
    - 충북 시·군 및 읍·면·동 단위 선택 (Folium 기반 지도 시각화)
    - 지도 행정경계(`adm_cd2`)와 AI 최신 데이터의 1:1 매칭 (146/153개 읍면동 커버)
-2. ** 지역 현황 대시보드 (Overview) **
+2. **지역 현황 대시보드 (Overview)**
    - 인구구조, GIS 접근성, 생활권 인프라 실데이터 통합 조회
-3. ** AI 순이동률 예측 (AI Prediction) **
+3. **AI 순이동률 예측 (AI Prediction)**
    - XGBoost 모델(`final_model.pkl`) 기반 다음 해 순이동률 AI 예측
-4. ** SHAP 요인 분석 (Explainable AI) **
+4. **SHAP 요인 분석 (Explainable AI)**
    - Global / Local SHAP 기반 모델 예측 기여도(Feature Importance) 제공
-5. ** What-if 정책 시뮬레이션 (Simulation) **
+5. **What-if 정책 시뮬레이션 (Simulation)**
    - 주요 정책 변수(10/20/30% 개선) 변동에 따른 모델 기반 민감도 분석
 
 ---
