@@ -216,3 +216,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Project local artifacts
+external/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+.DS_Store
