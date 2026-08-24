@@ -1,0 +1,249 @@
+/* frontend/*/DESIGN.md 의 "Public Trust & Integrity" 디자인 토큰 기반 공통 스타일 */
+
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+html, body, [class*="css"] {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    color: #191c1d;
+    background-color: #f8f9fa;
+}
+
+.block-container {
+    padding-top: 1.5rem;
+    padding-bottom: 3rem;
+    max-width: 1200px;
+}
+
+/* ── 상단 헤더 ── */
+.gov-header-container {
+    background-color: #ffffff;
+    border-bottom: 2px solid #0055aa;
+    padding: 1.2rem 2rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.gov-badge {
+    display: inline-block;
+    background-color: #eef4ff;
+    color: #0055aa;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    border: 1px solid #d0e1fd;
+}
+
+.gov-header-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #111111;
+    margin: 0 0 0.3rem 0;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
+.gov-header-sub {
+    font-size: 0.92rem;
+    color: #666666;
+    margin: 0;
+    font-weight: 400;
+}
+
+/* ── 섹션 타이틀 ── */
+.gov-section-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #111111;
+    margin: 1.5rem 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.gov-section-title::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 16px;
+    background-color: #0055aa;
+    border-radius: 2px;
+}
+
+/* ── 지표 카드 ── */
+.gov-card {
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 1.2rem;
+}
+
+.metric-label {
+    font-size: 0.82rem;
+    color: #666666;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+
+.metric-value-group {
+    display: flex;
+    align-items: baseline;
+    gap: 0.3rem;
+}
+
+.metric-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #111111;
+}
+
+.metric-unit {
+    font-size: 0.85rem;
+    color: #777777;
+}
+
+/* ── 상태 뱃지 ── */
+.badge-danger {
+    background-color: #fde8e8;
+    color: #9b1c1c;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+}
+
+.badge-success {
+    background-color: #def7ec;
+    color: #03543f;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+}
+
+/* ── 좌측 "분석 필터" 사이드바 ── */
+.sidebar-title {
+    padding: 0.4rem 0 1rem 0;
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 1rem;
+}
+
+.sidebar-title-main {
+    display: block;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #111111;
+}
+
+.sidebar-title-sub {
+    display: block;
+    font-size: 0.78rem;
+    color: #777777;
+    margin-top: 0.2rem;
+}
+
+.sidebar-section-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #444444;
+    margin: 0.8rem 0 0.3rem 0;
+}
+
+/* ── AI 분석 결과 해석 박스 (해시태그 칩 포함) ── */
+.ai-insight-box {
+    background-color: #eef4ff;
+    border: 1px solid #d0e1fd;
+    border-radius: 8px;
+    padding: 1.2rem 1.4rem;
+}
+
+.ai-insight-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #003e7f;
+    margin-bottom: 0.6rem;
+}
+
+.ai-insight-body {
+    font-size: 0.92rem;
+    color: #333333;
+    line-height: 1.7;
+}
+
+.ai-insight-tags {
+    margin-top: 0.8rem;
+}
+
+.ai-tag {
+    display: inline-block;
+    background-color: #ffffff;
+    color: #0055aa;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid #d0e1fd;
+    margin-right: 0.4rem;
+}
+
+/* ── 해석/안내 박스 (좌측 파란 보더) ── */
+.gov-info-box {
+    background-color: #f0f4f9;
+    border-left: 4px solid #0055aa;
+    padding: 1rem 1.2rem;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.9rem;
+    color: #333333;
+    line-height: 1.6;
+}
+
+/* ── 탭 (st.tabs 사용 시) ── */
+.stTabs [data-baseweb="tab-list"] {
+    border-bottom: 2px solid #dee2e6;
+    gap: 8px;
+}
+
+.stTabs [data-baseweb="tab"] {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #555555;
+    border-radius: 6px 6px 0 0;
+    padding: 0.6rem 1.2rem;
+    background-color: #f8fafc;
+    border: 1px solid #dee2e6;
+    border-bottom: none;
+}
+
+.stTabs [aria-selected="true"] {
+    background-color: #ffffff !important;
+    color: #0055aa !important;
+    border-top: 3px solid #0055aa !important;
+}
+
+/* ── 버튼 ── */
+.stButton>button {
+    background-color: #0055aa;
+    color: #ffffff;
+    font-weight: 600;
+    border-radius: 4px;
+    border: none;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.2s;
+}
+
+.stButton>button:hover {
+    background-color: #003e7f;
+    color: #ffffff;
+}
+
+.footer-text {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #dee2e6;
+    font-size: 0.8rem;
+    color: #777777;
+    text-align: center;
+    line-height: 1.6;
+}

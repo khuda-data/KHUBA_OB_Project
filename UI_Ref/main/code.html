@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>충청북도 AI 시뮬레이터 - 대시보드</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#5b000d",
+                        "surface-variant": "#e1e3e4",
+                        "surface-bright": "#f8f9fa",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-surface": "#191c1d",
+                        "surface-dim": "#d9dadb",
+                        "primary": "#003e7f",
+                        "outline-variant": "#c2c6d4",
+                        "primary-fixed": "#d6e3ff",
+                        "surface-tint": "#165db2",
+                        "on-primary-fixed": "#001b3e",
+                        "on-tertiary-container": "#b3ceff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#f8f9fa",
+                        "on-tertiary-fixed-variant": "#134684",
+                        "on-primary-fixed-variant": "#00458d",
+                        "on-tertiary-fixed": "#001b3d",
+                        "on-secondary-fixed-variant": "#92001b",
+                        "background": "#f8f9fa",
+                        "on-error": "#ffffff",
+                        "primary-container": "#0055aa",
+                        "secondary-fixed": "#ffdad8",
+                        "inverse-primary": "#aac7ff",
+                        "secondary": "#b81d2d",
+                        "on-tertiary": "#ffffff",
+                        "secondary-container": "#ff535a",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#edeeef",
+                        "secondary-fixed-dim": "#ffb3b0",
+                        "on-primary": "#ffffff",
+                        "on-surface-variant": "#424752",
+                        "tertiary-container": "#2a5795",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-primary-container": "#b3cdff",
+                        "error": "#ba1a1a",
+                        "tertiary": "#043f7c",
+                        "tertiary-fixed": "#d6e3ff",
+                        "surface-container-high": "#e7e8e9",
+                        "tertiary-fixed-dim": "#a8c8ff",
+                        "primary-fixed-dim": "#aac7ff",
+                        "on-error-container": "#93000a",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#2e3132",
+                        "surface-container-low": "#f3f4f5",
+                        "on-secondary-fixed": "#410007",
+                        "on-background": "#191c1d",
+                        "outline": "#727783"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xs": "8px",
+                        "sm": "16px",
+                        "xl": "80px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "container-max": "1200px",
+                        "lg": "48px",
+                        "base": "4px",
+                        "md": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Public Sans"],
+                        "body-md": ["Public Sans"],
+                        "headline-lg-mobile": ["Public Sans"],
+                        "headline-xl": ["Public Sans"],
+                        "headline-sm": ["Public Sans"],
+                        "caption": ["Public Sans"],
+                        "headline-md": ["Public Sans"],
+                        "headline-lg": ["Public Sans"],
+                        "label-md": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "headline-xl": ["40px", { "lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "caption": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "42px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[style*="'FILL' 1"] {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-surface border-b border-outline-variant w-full docked full-width top-0 z-50">
+<div class="flex justify-between items-center w-full px-md md:px-lg h-16 max-w-container-max mx-auto">
+<div class="flex items-center gap-sm">
+<span class="text-headline-md font-headline-md font-bold text-primary">충청북도 AI 시뮬레이터</span>
+</div>
+<nav class="hidden md:flex items-center gap-md h-full">
+<a class="h-full flex items-center text-primary font-bold border-b-2 border-primary pb-1 font-label-md text-label-md hover:bg-surface-container-low transition-colors px-2" href="#">현황 분석</a>
+<a class="h-full flex items-center text-on-surface-variant hover:text-primary font-label-md text-label-md hover:bg-surface-container-low transition-colors px-2" href="#">지역 선택</a>
+<a class="h-full flex items-center text-on-surface-variant hover:text-primary font-label-md text-label-md hover:bg-surface-container-low transition-colors px-2" href="#">AI 예측</a>
+<a class="h-full flex items-center text-on-surface-variant hover:text-primary font-label-md text-label-md hover:bg-surface-container-low transition-colors px-2" href="#">시뮬레이션</a>
+</nav>
+<div class="flex items-center gap-sm">
+<button class="font-label-md text-label-md text-primary bg-transparent border border-primary px-4 py-2 rounded-lg hover:bg-surface-container-low transition-colors">로그인</button>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen sticky top-0 p-sm gap-xs bg-surface-container-low border-r border-outline-variant docked left-0 w-64 z-40 overflow-y-auto">
+<div class="mb-lg p-xs">
+<img alt="충청북도 로고" class="w-12 h-12 rounded-full mb-sm object-cover" data-alt="A clean, modern logo placeholder for Chungcheongbuk-do government. Light background, professional blue tones, minimalist corporate style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC67KznPAS56vCG5Xni9Oc9A2to9oktX5FxFcChE696R92GJOooulngAq1X7YPTvHbsO6GrYQuVqBMPg550YvZTGnQRloP14Qru2U3IhrKnbYJ9OoPOfikoJeZyebfKv85-22zYcr-v-BBkb8CrDUKVaJmeFveuq5k7Mmb2z0ExnOtK57e8UrBps_URsizMvCj3uAYO4bvZ2VUB8ggHaWJXpz8cBkw5ojqB9VYF4MrmreZPZwYUjrsc"/>
+<h2 class="font-headline-sm text-headline-sm text-primary">분석 필터</h2>
+<p class="font-caption text-caption text-on-surface-variant">충청북도 지역소멸 대응</p>
+</div>
+<nav class="flex-1 flex flex-col gap-xs">
+<a class="flex items-center gap-sm p-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="filter_alt">filter_alt</span>
+                    시군구 필터
+                </a>
+<a class="flex items-center gap-sm p-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="location_on">location_on</span>
+                    읍면동 필터
+                </a>
+<a class="flex items-center gap-sm p-sm rounded-lg bg-primary-container text-on-primary-container scale-95 transition-transform font-label-md text-label-md shadow-sm" href="#">
+<span class="material-symbols-outlined" data-icon="group" style="font-variation-settings: 'FILL' 1;">group</span>
+                    인구 지표
+                </a>
+<a class="flex items-center gap-sm p-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+                    경제 지표
+                </a>
+<a class="flex items-center gap-sm p-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance">account_balance</span>
+                    사회 지표
+                </a>
+</nav>
+<button class="mt-auto mb-sm bg-primary-container text-on-primary font-label-md text-label-md py-3 rounded-lg hover:opacity-90 transition-opacity w-full shadow-sm">시뮬레이션 실행</button>
+<div class="flex flex-col gap-xs border-t border-outline-variant pt-sm">
+<a class="flex items-center gap-sm p-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                    도움말
+                </a>
+<a class="flex items-center gap-sm p-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                    설정
+                </a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto bg-background p-md md:p-lg flex flex-col gap-lg">
+<div class="flex flex-col xl:flex-row gap-lg">
+<!-- Map Area -->
+<section class="flex-1 min-h-[500px] bg-surface-container-lowest border border-surface-variant rounded-xl shadow-sm overflow-hidden flex flex-col relative">
+<div class="p-sm border-b border-surface-variant flex justify-between items-center bg-surface-bright">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">충청북도 읍면동 현황 지도</h3>
+<div class="flex gap-2">
+<span class="bg-primary-container text-on-primary px-2 py-1 rounded text-caption font-caption">인구 밀도</span>
+<span class="bg-surface-container px-2 py-1 rounded text-caption font-caption text-on-surface-variant">고령화율</span>
+</div>
+</div>
+<div class="flex-1 relative bg-surface-container-low" data-alt="A detailed, modern digital map interface showing the Chungcheongbuk-do region of South Korea. The map uses a sleek, light-mode corporate aesthetic with subtle blue and gray tones indicating data layers like population density. Clear, minimalist borders delineate regional subdivisions without clutter. High contrast, professional UI style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD2zHlKaE--mgEACN5S8zIPB4CG_xAKW54W7ftrOav6R9Fdc5e5t9u_MMDQF_2trNjXY15CYtlL2SwDhRI6JPjIeZX-i81nFUCNDoyfmIKsE9i9HFO4lAlwiOYrSkWZxmPVmTb72t8ci8yu39bER8Ham7hR84kmb6t0zf9uP986mtNaVl5SCsKOaLSnf46FgbIocHQePU37CJSo67RIbkgdTfCDafSNoh3rxeYyq8oXx1MiPqO1CgTl')">
+<!-- Placeholder for Map Visualization -->
+<div class="absolute bottom-4 right-4 bg-surface-container-lowest p-2 rounded shadow border border-surface-variant text-caption font-caption">
+<div class="flex items-center gap-2 mb-1"><span class="w-3 h-3 bg-primary rounded-full"></span> 높음</div>
+<div class="flex items-center gap-2 mb-1"><span class="w-3 h-3 bg-primary-fixed rounded-full"></span> 보통</div>
+<div class="flex items-center gap-2"><span class="w-3 h-3 bg-surface-variant rounded-full"></span> 낮음</div>
+</div>
+</div>
+</section>
+<!-- Data Cards Area -->
+<section class="xl:w-96 flex flex-col gap-md">
+<!-- Population Pyramid -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-md shadow-sm">
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="bar_chart">bar_chart</span>
+                            인구 구조
+                        </h4>
+<div class="h-48 bg-surface-container-low rounded flex items-center justify-center relative overflow-hidden" data-alt="A clean, data-visualization chart showing a population pyramid for a specific region. The chart uses alternating primary blue and soft gray bars on a pure white background. Minimalist axes, crisp typography, and professional corporate aesthetic suitable for a government dashboard." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCEXyXLCe1tnnVKXGDrCE1QbGR9f1xEhKVJ-HPC18-h2Jq4jzbN5-yNax0ZkjLfatNvN_GQD-W370flcbNUv4wPwjsy0TmPTpetuckDqPFTw2M_GFtCVOv9Vua84HVSwt8eF85h3C_uxD-uOTo0TyZ8196xPJRcl5QSMd-bLPoYm9AbI71caStS8vAJ-Ms__J9W-jNHw7LE0LxBONRG5vxu-6Mk186TwAbtD9wqhmJSXtAKxI1f1bgv')">
+<!-- Placeholder for Chart -->
+</div>
+</div>
+<!-- Key Metrics -->
+<div class="grid grid-cols-2 gap-sm">
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-sm shadow-sm flex flex-col justify-between">
+<span class="text-caption font-caption text-on-surface-variant mb-1">고령화 지수</span>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-md font-headline-md text-secondary">24.5%</span>
+<span class="text-caption font-caption text-error flex items-center"><span class="material-symbols-outlined text-[16px]" data-icon="arrow_upward">arrow_upward</span> 1.2%</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-sm shadow-sm flex flex-col justify-between">
+<span class="text-caption font-caption text-on-surface-variant mb-1">순이동률</span>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-md font-headline-md text-primary">-0.8%</span>
+<span class="text-caption font-caption text-tertiary flex items-center"><span class="material-symbols-outlined text-[16px]" data-icon="arrow_downward">arrow_downward</span> 0.1%</span>
+</div>
+</div>
+<div class="col-span-2 bg-surface-container-lowest border border-surface-variant rounded-xl p-sm shadow-sm flex flex-col justify-between">
+<span class="text-caption font-caption text-on-surface-variant mb-1">주요 위험 요인</span>
+<div class="flex gap-2 mt-2">
+<span class="bg-error-container text-on-error-container px-2 py-1 rounded text-caption font-caption font-bold">청년 유출 심화</span>
+<span class="bg-secondary-container text-on-secondary-container px-2 py-1 rounded text-caption font-caption font-bold">일자리 부족</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Bottom Section: History & Notices -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<section class="bg-surface-container-lowest border border-surface-variant rounded-xl p-md shadow-sm">
+<div class="flex justify-between items-center mb-md border-b border-surface-variant pb-2">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">최근 분석 이력</h4>
+<a class="text-primary text-label-md font-label-md hover:underline" href="#">전체보기</a>
+</div>
+<ul class="flex flex-col gap-2">
+<li class="flex justify-between items-center py-2 hover:bg-surface-container-low px-2 rounded cursor-pointer transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-outline" data-icon="history">history</span>
+<span class="font-body-md text-body-md text-on-surface">청주시 흥덕구 청년 인구 유출 시뮬레이션</span>
+</div>
+<span class="font-caption text-caption text-outline">2024.10.24</span>
+</li>
+<li class="flex justify-between items-center py-2 hover:bg-surface-container-low px-2 rounded cursor-pointer transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-outline" data-icon="history">history</span>
+<span class="font-body-md text-body-md text-on-surface">충주시 산업단지 조성에 따른 인구 변화 예측</span>
+</div>
+<span class="font-caption text-caption text-outline">2024.10.20</span>
+</li>
+<li class="flex justify-between items-center py-2 hover:bg-surface-container-low px-2 rounded cursor-pointer transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-outline" data-icon="history">history</span>
+<span class="font-body-md text-body-md text-on-surface">제천시 고령화 대응 정책 효과 분석</span>
+</div>
+<span class="font-caption text-caption text-outline">2024.10.15</span>
+</li>
+</ul>
+</section>
+<section class="bg-surface-container-lowest border border-surface-variant rounded-xl p-md shadow-sm">
+<div class="flex justify-between items-center mb-md border-b border-surface-variant pb-2">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">공지사항</h4>
+<a class="text-primary text-label-md font-label-md hover:underline" href="#">더보기</a>
+</div>
+<ul class="flex flex-col gap-2">
+<li class="flex justify-between items-center py-2 hover:bg-surface-container-low px-2 rounded cursor-pointer transition-colors">
+<div class="flex items-center gap-3">
+<span class="bg-error-container text-on-error-container px-2 py-0.5 rounded text-[10px] font-bold">필독</span>
+<span class="font-body-md text-body-md text-on-surface truncate w-64">2024년 하반기 데이터 업데이트 안내</span>
+</div>
+<span class="font-caption text-caption text-outline">2024.10.25</span>
+</li>
+<li class="flex justify-between items-center py-2 hover:bg-surface-container-low px-2 rounded cursor-pointer transition-colors">
+<div class="flex items-center gap-3">
+<span class="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded text-[10px]">일반</span>
+<span class="font-body-md text-body-md text-on-surface truncate w-64">시스템 점검에 따른 서비스 일시 중단 안내</span>
+</div>
+<span class="font-caption text-caption text-outline">2024.10.18</span>
+</li>
+<li class="flex justify-between items-center py-2 hover:bg-surface-container-low px-2 rounded cursor-pointer transition-colors">
+<div class="flex items-center gap-3">
+<span class="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded text-[10px]">일반</span>
+<span class="font-body-md text-body-md text-on-surface truncate w-64">신규 예측 모델 '지역 상생 모델' 추가 안내</span>
+</div>
+<span class="font-caption text-caption text-outline">2024.10.05</span>
+</li>
+</ul>
+</section>
+</div>
+<!-- Footer -->
+<footer class="mt-auto bg-surface-container-highest w-full border-t border-outline-variant py-lg px-md md:px-xl flex flex-col md:flex-row justify-between items-center gap-md max-w-container-max mx-auto full-width bottom">
+<div class="font-headline-sm text-headline-sm text-on-surface">
+                    충청북도 AI 시뮬레이터
+                </div>
+<div class="flex flex-wrap gap-4 justify-center">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" href="#">공공기관 정보</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" href="#">개인정보처리방침</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" href="#">이용약관</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" href="#">관련 기관 링크</a>
+</div>
+<div class="font-caption text-caption text-on-surface-variant">
+                    © 2024 Chungcheongbuk-do. All rights reserved.
+                </div>
+</footer>
+</main>
+</div>
+</body></html>
