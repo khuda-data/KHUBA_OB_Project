@@ -11,7 +11,14 @@ from state import get_selected_region
 
 def render() -> None:
     st.markdown('<div class="gov-section-title"> 충청지역 전체 개요</div>', unsafe_allow_html=True)
-    st.caption("색상은 AI 모델이 예측한 다음 해 순이동률입니다. 좌측 사이드바에서 시·군/읍·면·동을 선택하면 다른 페이지에서 해당 지역의 상세 분석을 볼 수 있습니다.")
+    st.caption(
+        "색상은 AI 모델이 예측한 다음 해 순이동률입니다. 좌측 사이드바에서 시·군/읍·면·동을 선택하면 다른 페이지에서 해당 지역의 상세 분석을 볼 수 있습니다.",
+        help=(
+            "순이동률이란? 특정 지역에서 전입자 수와 전출자 수의 차이를 인구 대비 비율로 나타낸 지표입니다. "
+            "양수(+)면 순유입(전입이 전출보다 많음, 인구 증가 방향), 음수(-)면 순유출(전출이 전입보다 많음, "
+            "인구 감소 방향)을 의미합니다."
+        ),
+    )
 
     predictions = ai.get_all_predictions()
     m = create_overview_map(predictions)
