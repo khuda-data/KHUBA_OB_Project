@@ -20,8 +20,8 @@ Streamlit 네이티브 멀티페이지(`st.navigation(position="top")`)로 재�
 |---|---|---|---|
 | **지역 선택** (기본 화면) | `/region-select` | 충북 전체 146개 읍·면·동을 AI 예측 순이동률 기준 색상(choropleth)으로 표시하는 개요 지도, 현재 선택 지역 안내 + 다른 3개 탭으로 이동하는 카드형 버튼, 시·군별 예측 요약표 | [views/region_select.py](views/region_select.py) |
 | **현황 분석** | `/status` | 선택한 읍·면·동을 강조 표시하는 지도, 인구구조 카드(총인구/청년비율/고령화율/인구증감률), GIS 접근성 카드(의료·응급의료·교육·교통 평균접근거리), 생활권 인프라 상세 데이터(펼치기) | [views/status_overview.py](views/status_overview.py) |
-| **AI 예측** | `/ai-prediction` | 다음 해 순이동률 예측값(색상·굵은 글씨 강조), Local SHAP 상위 5개 요인, "AI 분석 결과 해석" 박스, 충북 전체 Global SHAP(펼치기) | [views/ai_prediction.py](views/ai_prediction.py) |
-| **시뮬레이션** | `/simulation` | What-if 정책 변수(4종) + 개선율(10/20/30%) 선택, 시나리오별 예측 변화 차트, 기존/적용 후 결과 카드, 시나리오 비교표, "모델 기반 시뮬레이션 분석" 해석 박스 | [views/whatif_simulation.py](views/whatif_simulation.py) |
+| **AI 예측** | `/ai-prediction` | 다음 해 순이동률 예측값(색상·굵은 글씨 강조), Local SHAP 상위 5개 모델 예측 기여도, "AI 분석 결과 해석" 박스, 지역별 최신 데이터 기준 Global SHAP(펼치기) | [views/ai_prediction.py](views/ai_prediction.py) |
+| **시뮬레이션** | `/simulation` | What-if 정책 변수(4종) + 개선율(10/20/30%) 선택, 시나리오별 예측 변화 차트, 기존/조건 변경 후 모델 예측 카드, 시나리오 비교표, "모델 기반 시뮬레이션 분석" 해석 박스 | [views/whatif_simulation.py](views/whatif_simulation.py) |
 
 ---
 
@@ -36,6 +36,8 @@ MVP/
 ├── state.py                     # 세션 상태(선택된 시·군/읍·면·동) 초기화·조회 헬퍼
 ├── ai_module.py                   # src.* AI 서비스 레이어 어댑터 (모델/데이터 캐싱 + 함수 매핑)
 ├── run.sh                          # macOS libomp 폴백 실행 스크립트
+├── scripts/
+│   └── ai_health_check.py           # Streamlit 없이 AI 서비스 레이어 전체 검증
 ├── icon.jpg                         # 브라우저 탭 파비콘 (app.py의 page_icon)
 ├── requirements.txt                  # pip 의존성 목록
 ├── packages.txt                       # Streamlit Cloud(Linux)용 apt 패키지 (libgomp1 — XGBoost용 OpenMP)
@@ -99,7 +101,8 @@ MVP/
 
 **`ai_module.py`**
 - `src/` 함수들을 그대로 호출하는 어댑터. 모델 번들 + 최신 지역 데이터는 `st.cache_resource`로 프로세스당 1회만 로드한다.
-- 제공 함수: `get_sigungu_list`, `get_eupmyeondong_list`, `get_region_code`, `get_region_result`, `get_local_shap`, `get_global_shap`, `run_what_if_scenarios`, `run_representative_scenarios`, `get_all_predictions`(전체 146개 지역 일괄 예측 — 지역 선택 페이지의 개요 지도용).
+- 제공 함수: `get_sigungu_list`, `get_eupmyeondong_list`, `get_region_code`, `get_region_result`, `get_local_shap`, `get_global_shap`, `run_what_if_scenarios`, `summarize_what_if_scenarios`, `run_representative_scenarios`, `get_all_predictions`(전체 146개 지역 일괄 예측 — 지역 선택 페이지의 개요 지도용).
+- `get_global_shap()`는 학습 전체 데이터가 아니라 `build_latest_region_data()`로 만든 지역별 최신 데이터 146개 행을 기준으로 Global SHAP 요약을 계산한다. 화면에는 양/음이 상쇄되지 않도록 `mean_abs_shap`을 표시한다.
 
 **`components/sidebar.py`**
 - 상단에 "충청지역 전체 보기" 페이지 이동 링크, 시·군/읍·면·동 `selectbox` 2개, 인구감소지역 여부 배지를 렌더링한다.
@@ -143,9 +146,10 @@ state.get_selected_region()  ──── region_code 확정 (src.region_service
         ▼
 ai_module.py  (캐시된 모델 번들 + 최신 지역 데이터)
         │
-        ├─ get_region_result()   → src.service        → 인구/GIS/예측값
-        ├─ get_local_shap()      → src.shap_service    → SHAP 상위 5개 요인
+        ├─ get_region_result()   → src.service        → 인구/GIS/예측값 + 기준/예측연도
+        ├─ get_local_shap()      → src.shap_service    → SHAP 상위 5개 모델 예측 기여도
         ├─ run_what_if_scenarios() → src.whatif_service → 10/20/30% 시나리오
+        ├─ summarize_what_if_scenarios() → src.whatif_service → 방향성/단조성 요약
         └─ get_all_predictions() → 146개 지역 일괄 예측 (지역 선택 개요 지도용)
         │
         ▼
@@ -163,6 +167,48 @@ pip install -r requirements.txt
 # 2. 앱 실행
 streamlit run app.py
 ```
+
+### AI 서비스 health-check
+
+Streamlit 없이 모델/데이터 로딩, 146개 지역 예측, Local SHAP, What-if, 대표 시나리오, 주요 regression 값을 한 번에 검증할 수 있습니다.
+
+```bash
+python scripts/ai_health_check.py
+```
+
+정상 종료 시 마지막에 `FINAL: PASS`가 출력됩니다.
+
+### 주요 AI 반환 구조
+
+`get_region_result()`의 `prediction`은 다음 정보를 포함합니다.
+
+```python
+{
+    "target": "타깃_다음해_순이동률",
+    "value": -2.1026148796081543,
+    "base_year": 2024,
+    "prediction_year": 2025,
+}
+```
+
+- `base_year`: 해당 지역의 최신 데이터 기준연도
+- `prediction_year`: `base_year + 1`
+
+`summarize_what_if_scenarios()`는 이미 계산된 10/20/30% What-if 결과를 받아 모델 반응 패턴을 요약합니다.
+
+```python
+{
+    "direction_consistent": True,
+    "monotonic": True,
+    "all_positive": True,
+    "all_negative": False,
+    "best_rate": 0.3,
+    "best_change": 0.32829549908638,
+    "interpretation": "개선율 증가에 따라 모델 예측값이 일관되게 증가하는 패턴입니다.",
+}
+```
+
+이 summary는 정책 효과 검증이 아니라 모델 기반 What-if 결과의 방향성과 단조성을 해석하기 위한 보조 정보입니다.
 
 ### macOS(Apple Silicon)에서 XGBoost 오류가 날 경우
 

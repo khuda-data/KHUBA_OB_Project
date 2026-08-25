@@ -16,6 +16,7 @@ WHAT_IF_FEATURES = [
     "교통거점_평균접근거리",
 ]
 ALLOWED_IMPROVEMENT_RATES = [0.1, 0.2, 0.3]
+DEFAULT_CONSISTENCY_TOLERANCE = 1e-9
 
 
 def _to_finite_float(value, name: str) -> float:
@@ -168,6 +169,89 @@ def run_what_if_scenarios(
     ]
     json.dumps(results, ensure_ascii=False)
     return results
+
+
+def summarize_what_if_scenarios(
+    scenarios: list[dict],
+    tolerance: float = DEFAULT_CONSISTENCY_TOLERANCE,
+) -> dict:
+    """Summarize consistency of precomputed model-based What-if scenarios."""
+    if not scenarios:
+        raise ValueError("scenarios must be a non-empty list")
+
+    try:
+        tol = abs(float(tolerance))
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"tolerance must be numeric: {tolerance}") from exc
+
+    sorted_scenarios = sorted(
+        scenarios,
+        key=lambda scenario: _to_finite_float(
+            scenario["improvement_rate"],
+            "improvement_rate",
+        ),
+    )
+    changes = [
+        _to_finite_float(scenario["change"], "change")
+        for scenario in sorted_scenarios
+    ]
+    rates = [
+        _to_finite_float(scenario["improvement_rate"], "improvement_rate")
+        for scenario in sorted_scenarios
+    ]
+
+    signs = [
+        1 if change > tol else -1 if change < -tol else 0
+        for change in changes
+    ]
+    non_zero_signs = {sign for sign in signs if sign != 0}
+    has_zero_or_near_zero = any(sign == 0 for sign in signs)
+    all_near_zero = all(sign == 0 for sign in signs)
+    direction_consistent = len(non_zero_signs) <= 1
+    all_positive = bool(non_zero_signs) and non_zero_signs == {1}
+    all_negative = bool(non_zero_signs) and non_zero_signs == {-1}
+
+    nondecreasing = all(
+        later >= earlier - tol
+        for earlier, later in zip(changes, changes[1:])
+    )
+    nonincreasing = all(
+        later <= earlier + tol
+        for earlier, later in zip(changes, changes[1:])
+    )
+    monotonic = nondecreasing or nonincreasing
+
+    best_index = max(range(len(changes)), key=lambda index: changes[index])
+    best_rate = rates[best_index]
+    best_change = max(changes)
+    worst_change = min(changes)
+
+    if all_near_zero:
+        interpretation = "해당 조건에서는 모델 예측값의 변화가 거의 나타나지 않습니다."
+    elif not direction_consistent or not monotonic:
+        interpretation = "개선율에 따른 예측 변화 방향이 일관되지 않아 신중한 해석이 필요합니다."
+    elif monotonic and all_positive and has_zero_or_near_zero:
+        interpretation = "일부 구간의 변화는 매우 작지만, 전반적으로 동일한 방향의 예측 변화가 나타납니다."
+    elif monotonic and all_positive:
+        interpretation = "개선율 증가에 따라 모델 예측값이 일관되게 증가하는 패턴입니다."
+    elif monotonic and all_negative:
+        interpretation = "개선율 증가에 따라 모델 예측값이 일관되게 감소하는 패턴입니다."
+    else:
+        interpretation = "일부 구간의 변화는 매우 작지만, 전반적으로 동일한 방향의 예측 변화가 나타납니다."
+
+    result = {
+        "direction_consistent": bool(direction_consistent),
+        "monotonic": bool(monotonic),
+        "all_positive": bool(all_positive),
+        "all_negative": bool(all_negative),
+        "has_zero_or_near_zero": bool(has_zero_or_near_zero),
+        "best_rate": _to_finite_float(best_rate, "best_rate"),
+        "best_change": _to_finite_float(best_change, "best_change"),
+        "worst_change": _to_finite_float(worst_change, "worst_change"),
+        "interpretation": interpretation,
+    }
+    json.dumps(result, ensure_ascii=False)
+    return result
 
 
 def run_what_if_scenarios_wide(

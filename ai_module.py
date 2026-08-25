@@ -23,6 +23,7 @@ from src.shap_service import global_shap as _global_shap, get_local_shap as _get
 from src.whatif_service import (
     WHAT_IF_FEATURES,
     run_what_if_scenarios as _run_what_if_scenarios,
+    summarize_what_if_scenarios as _summarize_what_if_scenarios,
 )
 from src.scenario_service import run_representative_scenarios as _run_representative_scenarios
 
@@ -80,7 +81,7 @@ def get_local_shap(region_code: int, top_k: int = 5) -> dict:
 
 @st.cache_data(show_spinner=False)
 def get_global_shap(top_k: int = 8) -> dict:
-    """충북 전체 지역 기준 Global SHAP 피처 중요도 반환."""
+    """지역별 최신 데이터 기준 Global SHAP 모델 예측 기여도 요약 반환."""
     bundle, latest_df = _load_bundle()
     X = latest_df[bundle["features"]]
     return _global_shap(bundle["model"], X, top_k=top_k)
@@ -93,6 +94,11 @@ def run_what_if_scenarios(region_code: int, feature: str) -> list:
     return _run_what_if_scenarios(
         bundle["model"], latest_df, region_code, feature, bundle["features"]
     )
+
+
+def summarize_what_if_scenarios(scenarios: list) -> dict:
+    """계산된 What-if 10/20/30% 결과의 방향성과 단조성을 요약."""
+    return _summarize_what_if_scenarios(scenarios)
 
 
 @st.cache_data(show_spinner=False)
