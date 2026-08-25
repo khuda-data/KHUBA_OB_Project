@@ -72,7 +72,7 @@ def render() -> None:
             f"{dong}의 다음 해 순이동률은 <b>{pred_val:+.2f}%</b>로 예측됩니다. "
             f"SHAP 분석 결과, 예측값에 가장 크게 기여한 변수는 "
             f"<b>{pretty(top_feature['feature'])}</b>이며, 이 변수는 예측값에 {contribution_direction} 기여를 보이고 있습니다. "
-            f"이 모델은 원인이 아닌 <b>모델 예측 기여도</b>를 나타내는 지표입니다."
+            f"이 지표는 원인이 아닌 <b>모델 예측 기여도</b>를 나타내는 지표입니다."
         ),
         tags=tag_names,
     )
