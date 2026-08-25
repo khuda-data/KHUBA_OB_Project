@@ -19,18 +19,21 @@ def render() -> None:
 
     selected = get_selected_region()
     with st.container(border=True):
-        st.markdown(f"현재 선택된 지역: **{selected['sigu']} {selected['dong']}** — 아래 버튼을 눌러 상세 내용을 확인하세요.")
+        st.markdown(f"현재 선택된 지역: **{selected['sigu']} {selected['dong']}** — 아래에서 상세 내용을 확인하세요.")
         pages = st.session_state.get("nav_pages", {})
         link_c1, link_c2, link_c3 = st.columns(3)
         with link_c1:
             if "status" in pages:
                 st.page_link(pages["status"], label="현황 분석", icon=":material/query_stats:")
+                st.caption("인구구조 · GIS 접근성 데이터")
         with link_c2:
             if "ai-prediction" in pages:
                 st.page_link(pages["ai-prediction"], label="AI 예측", icon=":material/smart_toy:")
+                st.caption("순이동률 예측 · SHAP 요인 분석")
         with link_c3:
             if "simulation" in pages:
                 st.page_link(pages["simulation"], label="시뮬레이션", icon=":material/tune:")
+                st.caption("What-if 정책 변수 민감도 분석")
 
     st.markdown('<div class="gov-section-title"> 시·군별 예측 요약</div>', unsafe_allow_html=True)
 

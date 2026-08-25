@@ -51,7 +51,9 @@ def render_signed_value(
     )
     caption_html = f'<div class="metric-caption">{caption}</div>' if caption else ""
     st.markdown(f"""
-    <div class="signed-value" style="color:{color};">{value_text}</div>
-    {badge_html}
-    {caption_html}
+    <div class="signed-value-block">
+        <div class="signed-value" style="color:{color};">{value_text}</div>
+        {badge_html}
+        {caption_html}
+    </div>
     """, unsafe_allow_html=True)

@@ -239,26 +239,32 @@ html, body, [class*="css"] {
 }
 
 /* ── 부호 강조 큰 숫자 (예측값 등) ── */
+.signed-value-block {
+    padding: 0.6rem 0 0.4rem 0;
+}
+
 .signed-value {
     font-size: 2.4rem;
     font-weight: 800;
     line-height: 1.2;
     letter-spacing: -0.02em;
+    margin-bottom: 0.6rem;
 }
 
 .signed-value-badge {
     display: inline-block;
     font-size: 0.8rem;
     font-weight: 700;
-    padding: 0.25rem 0.7rem;
+    padding: 0.35rem 0.8rem;
     border-radius: 999px;
-    margin-top: 0.4rem;
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
 }
 
 .metric-caption {
     font-size: 0.78rem;
     color: #777777;
-    margin-top: 0.5rem;
+    margin-top: 0.6rem;
 }
 
 /* ── 같은 행에 나란히 놓인 카드(st.container(border=True))의 높이를 맞춘다 ── */
@@ -283,6 +289,54 @@ div[data-testid="stColumn"] div[data-testid="stLayoutWrapper"] {
 
 div[data-testid="stColumn"] div[data-testid="stLayoutWrapper"] > div {
     width: 100%;
+}
+
+/* ── 페이지 이동 링크 카드 (지역 선택 화면, st.page_link를 Notion 서브페이지 링크처럼 강조) ──
+   st.page_link는 실제 클릭 시 앱 내부에서 페이지를 전환하는 <a data-testid="stPageLink-NavLink">를
+   렌더링한다. raw HTML(<a> 직접 작성)로 만들면 Streamlit이 보안상 target="_blank"를 강제로 붙여
+   새 탭이 열려버리므로, 반드시 st.page_link를 이 selector로 스타일링해서 써야 한다. */
+/* st.page_link는 기본적으로 내용물 너비만큼만 차지해서, 3개를 나란히 놓으면
+   버튼마다 너비(그래서 아이콘/글씨 시작 위치)가 제각각이 된다. 컬럼 전체 너비로
+   늘려서 세 버튼의 폭과 텍스트 위치를 맞춘다. */
+div[data-testid="stElementContainer"]:has(div[data-testid="stPageLink"]) {
+    width: 100% !important;
+}
+
+div[data-testid="stPageLink"],
+div[data-testid="stPageLink"] > div {
+    width: 100%;
+}
+
+div[data-testid="stPageLink-NavLink"] {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.9rem 1.1rem;
+    background: #ffffff;
+    border: 1px solid #e9e9e7;
+    border-radius: 8px;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+div[data-testid="stPageLink-NavLink"]:hover {
+    background: #f7f7f5;
+    border-color: #b6c8e0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transform: translateY(-1px);
+}
+
+div[data-testid="stPageLink-NavLink"] [data-testid="stIconMaterial"] {
+    font-size: 1.5rem !important;
+    color: #0055aa;
+}
+
+div[data-testid="stPageLink-NavLink"] p {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #191c1d;
+    margin: 0;
 }
 
 .footer-text {

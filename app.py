@@ -33,7 +33,7 @@ pages = [
     st.Page(ai_prediction.render, title="AI 예측", url_path="ai-prediction"),
     st.Page(whatif_simulation.render, title="시뮬레이션", url_path="simulation"),
 ]
-# region_select.py 등 다른 페이지에서 st.page_link()로 페이지 전환 버튼을 만들 때 쓸 수 있도록
+# region_select.py에서 st.page_link()로 다른 페이지로 이동하는 카드형 버튼을 만들 때 쓸 수 있도록
 # url_path -> st.Page 매핑을 세션에 저장해 둔다.
 st.session_state["nav_pages"] = {p.url_path: p for p in pages}
 
