@@ -31,6 +31,10 @@ from src.scenario_service import run_representative_scenarios as _run_representa
 # What-if로 조정 가능한 정책 변수 (src.whatif_service.WHAT_IF_FEATURES 그대로 노출)
 WHATIF_FEATURES = WHAT_IF_FEATURES
 
+# src/*.py만 바뀌어도(예: base_year 필드 추가) 이 파일의 래퍼 함수 코드는 그대로라
+# st.cache_data 캐시 키가 바뀌지 않는다. 재기동을 깜빡해도 결국 스스로 갱신되도록 짧은 ttl을 둔다.
+CACHE_TTL_SECONDS = 3600
+
 
 @st.cache_resource(show_spinner="AI 모델 및 지역 데이터를 불러오는 중...")
 def _load_bundle():
@@ -58,7 +62,7 @@ def get_region_code(sigungu: str, eupmyeondong: str) -> int:
     return _get_region_code(latest_df, sigungu, eupmyeondong)
 
 
-@st.cache_data(show_spinner=False)
+@st.cache_data(show_spinner=False, ttl=CACHE_TTL_SECONDS)
 def get_region_result(region_code: int) -> dict:
     """지역 현황(인구/접근성/생활권) + 다음 해 순이동률 예측을 함께 반환.
 
@@ -70,7 +74,7 @@ def get_region_result(region_code: int) -> dict:
     )
 
 
-@st.cache_data(show_spinner=False)
+@st.cache_data(show_spinner=False, ttl=CACHE_TTL_SECONDS)
 def get_local_shap(region_code: int, top_k: int = 5) -> dict:
     """읍면동 단위 Local SHAP TOP-K 모델 예측 기여도 반환."""
     bundle, latest_df = _load_bundle()
@@ -79,7 +83,7 @@ def get_local_shap(region_code: int, top_k: int = 5) -> dict:
     )
 
 
-@st.cache_data(show_spinner=False)
+@st.cache_data(show_spinner=False, ttl=CACHE_TTL_SECONDS)
 def get_global_shap(top_k: int = 8) -> dict:
     """지역별 최신 데이터 기준 Global SHAP 모델 예측 기여도 요약 반환."""
     bundle, latest_df = _load_bundle()
@@ -87,7 +91,7 @@ def get_global_shap(top_k: int = 8) -> dict:
     return _global_shap(bundle["model"], X, top_k=top_k)
 
 
-@st.cache_data(show_spinner=False)
+@st.cache_data(show_spinner=False, ttl=CACHE_TTL_SECONDS)
 def run_what_if_scenarios(region_code: int, feature: str) -> list:
     """선택 정책 변수에 대해 10/20/30% 개선 모델 기반 민감도 분석 3건을 반환."""
     bundle, latest_df = _load_bundle()
@@ -101,14 +105,14 @@ def summarize_what_if_scenarios(scenarios: list) -> dict:
     return _summarize_what_if_scenarios(scenarios)
 
 
-@st.cache_data(show_spinner=False)
+@st.cache_data(show_spinner=False, ttl=CACHE_TTL_SECONDS)
 def run_representative_scenarios() -> list:
     """대표 지역별 시연용 What-if 시나리오 목록 반환."""
     bundle, latest_df = _load_bundle()
     return _run_representative_scenarios(bundle["model"], latest_df, bundle["features"])
 
 
-@st.cache_data(show_spinner="충북 전체 146개 지역 예측을 계산하는 중...")
+@st.cache_data(show_spinner="충북 전체 146개 지역 예측을 계산하는 중...", ttl=CACHE_TTL_SECONDS)
 def get_all_predictions() -> dict:
     """충북 전체 지역의 다음 해 순이동률 예측을 {지역코드: 예측값} 형태로 일괄 반환.
 
