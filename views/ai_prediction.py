@@ -15,7 +15,7 @@ def render() -> None:
 
     st.markdown(f'<div class="gov-header-title" style="font-size:1.3rem;">{sigu} {dong} AI 예측 및 기여도 분석</div>', unsafe_allow_html=True)
     st.caption(
-        "XGBoost 기반 모델로 다음 해 순이동률을 예측하고, SHAP으로 모델 예측에 대한 변수별 기여도를 확인합니다.",
+        "다음 해 순이동률을 예측하고, 모델 예측에 대한 변수별 기여도를 확인합니다.",
         help=(
             "순이동률이란? 특정 지역에서 전입자 수와 전출자 수의 차이를 인구 대비 비율로 나타낸 지표입니다. "
             "양수(+)면 순유입(전입이 전출보다 많음, 인구 증가 방향), 음수(-)면 순유출(전출이 전입보다 많음, "
