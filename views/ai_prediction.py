@@ -14,7 +14,9 @@ def render() -> None:
     sigu, dong, region_code = selected["sigu"], selected["dong"], selected["region_code"]
 
     st.markdown(f'<div class="gov-header-title" style="font-size:1.3rem;">{sigu} {dong} AI 예측 및 요인 분석</div>', unsafe_allow_html=True)
-    st.caption("XGBoost 기반 모델로 다음 해 순이동률을 예측하고, SHAP(모델 예측 기여도)로 주요 영향 요인을 분석합니다.")
+    st.caption(
+        "XGBoost 기반 모델로 다음 해 순이동률을 예측하고, SHAP(모델 예측 기여도)로 주요 영향 요인을 분석합니다.",
+    )
 
     region_result = ai.get_region_result(region_code)
     pred_val = region_result["prediction"]["value"]

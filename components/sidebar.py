@@ -18,9 +18,17 @@ def render_sidebar_filters() -> None:
         st.markdown("""
         <div class="sidebar-title">
             <span class="sidebar-title-main">분석 필터</span>
-            <span class="sidebar-title-sub">충청북도 지역소멸 대응</span>
+            <span class="sidebar-title-sub">충청지역 지역소멸 대응</span>
         </div>
         """, unsafe_allow_html=True)
+
+        pages = st.session_state.get("nav_pages", {})
+        if "region-select" in pages:
+            st.page_link(
+                pages["region-select"],
+                label="충청지역 전체 보기",
+                icon=":material/map:",
+            )
 
         st.markdown('<div class="sidebar-section-label">시·군 필터</div>', unsafe_allow_html=True)
         sigu_list = ai.get_sigungu_list()
@@ -41,6 +49,17 @@ def render_sidebar_filters() -> None:
         st.session_state[DONG_KEY] = selected_dong
 
         if is_depopulation_area(selected_sigu):
-            st.markdown('<span class="badge-danger">주의: 인구감소지역</span>', unsafe_allow_html=True)
+            st.caption(
+                '<span class="badge-danger">주의: 인구감소지역</span>',
+                unsafe_allow_html=True,
+                help=(
+                    "행정안전부가 2021년 10월 지정한 전국 89개 인구감소지역 중 하나입니다 "
+                    "(충북 6곳: 제천시·보은군·옥천군·영동군·괴산군·단양군)."
+                ),
+            )
         else:
-            st.markdown('<span class="badge-success">일반지역</span>', unsafe_allow_html=True)
+            st.caption(
+                '<span class="badge-success">일반지역</span>',
+                unsafe_allow_html=True,
+                help="행정안전부가 지정한 인구감소지역(충북 6곳) 목록에 포함되지 않은 지역입니다.",
+            )

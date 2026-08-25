@@ -17,7 +17,7 @@ def render() -> None:
     st.markdown(f'<div class="gov-header-title" style="font-size:1.3rem;">{dong} What-if 정책 시뮬레이션</div>', unsafe_allow_html=True)
     st.caption(
         "정책 변수를 조절해 AI 모델의 예측 순이동률 변화를 확인하는 모델 기반 민감도 분석입니다. "
-        "실제 정책 시행의 인과효과를 보장하지 않습니다."
+        "실제 정책 시행의 인과효과를 보장하지 않습니다.",
     )
 
     col_setting, col_chart = st.columns([1, 1.2])

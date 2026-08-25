@@ -5,13 +5,14 @@ from __future__ import annotations
 import streamlit as st
 
 
-def render_metric_card(label: str, value, unit: str = "") -> None:
+def render_metric_card(label: str, value, unit: str = "", value_color: str | None = None) -> None:
     """단일 지표 카드 HTML 렌더링."""
+    value_style = f' style="color:{value_color};"' if value_color else ""
     st.markdown(f"""
     <div class="gov-card">
         <div class="metric-label">{label}</div>
         <div class="metric-value-group">
-            <span class="metric-value">{value}</span>
+            <span class="metric-value"{value_style}>{value}</span>
             <span class="metric-unit">{unit}</span>
         </div>
     </div>
@@ -23,11 +24,22 @@ def render_metric_row(items: list[tuple]) -> None:
     cols = st.columns(len(items))
     for col, (label, value, unit) in zip(cols, items):
         with col:
-            render_metric_card(label, value, unit)
+            value_color = None
+            if label == "전년 대비 인구증감률":
+                numeric_value = float(str(value).replace(",", "").replace("%", ""))
+                value_color = (
+                    POSITIVE_COLOR
+                    if numeric_value > 0
+                    else NEGATIVE_COLOR
+                    if numeric_value < 0
+                    else NEUTRAL_COLOR
+                )
+            render_metric_card(label, value, unit, value_color)
 
 
 POSITIVE_COLOR = "#00C853"
 NEGATIVE_COLOR = "#FF5252"
+NEUTRAL_COLOR = "#6B7280"
 
 
 def render_signed_value(

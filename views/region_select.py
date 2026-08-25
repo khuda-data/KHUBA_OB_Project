@@ -1,4 +1,4 @@
-"""'지역 선택' 페이지 — 충북 전체 개요 지도 + 시군별 요약."""
+"""'지역 선택' 페이지 — 충청지역 전체 개요 지도 + 시군별 요약."""
 
 import pandas as pd
 import streamlit as st
@@ -10,7 +10,7 @@ from state import get_selected_region
 
 
 def render() -> None:
-    st.markdown('<div class="gov-section-title"> 충청북도 전체 개요</div>', unsafe_allow_html=True)
+    st.markdown('<div class="gov-section-title"> 충청지역 전체 개요</div>', unsafe_allow_html=True)
     st.caption("색상은 AI 모델이 예측한 다음 해 순이동률입니다. 좌측 사이드바에서 시·군/읍·면·동을 선택하면 다른 페이지에서 해당 지역의 상세 분석을 볼 수 있습니다.")
 
     predictions = ai.get_all_predictions()

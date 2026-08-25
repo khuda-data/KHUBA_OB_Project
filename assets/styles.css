@@ -105,6 +105,11 @@ html, body, [class*="css"] {
 }
 
 /* ── 상태 뱃지 ── */
+.badge-danger,
+.badge-success {
+    cursor: help;
+}
+
 .badge-danger {
     background-color: #fde8e8;
     color: #9b1c1c;
@@ -347,4 +352,123 @@ div[data-testid="stPageLink-NavLink"] p {
     color: #777777;
     text-align: center;
     line-height: 1.6;
+}
+
+/* ── 모바일 반응형 레이아웃 ── */
+@media (max-width: 768px) {
+    .block-container {
+        width: 100%;
+        max-width: 100%;
+        padding: 1rem 0.85rem 2rem;
+    }
+
+    .gov-header-container {
+        padding: 1rem 1.1rem;
+        margin-bottom: 0.75rem;
+        border-radius: 6px;
+    }
+
+    .gov-header-title {
+        font-size: 1.25rem;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+    }
+
+    .gov-header-sub {
+        font-size: 0.82rem;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+
+    .gov-section-title {
+        font-size: 1rem;
+        margin: 1.1rem 0 0.7rem;
+        line-height: 1.4;
+    }
+
+    div[data-testid="stHorizontalBlock"] {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    div[data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] {
+        width: 100% !important;
+        min-width: 100% !important;
+        flex: 1 1 100% !important;
+    }
+
+    .gov-card,
+    .ai-insight-box,
+    .gov-info-box {
+        padding: 1rem;
+    }
+
+    .metric-value {
+        font-size: 1.35rem;
+    }
+
+    .metric-label,
+    .metric-unit {
+        font-size: 0.78rem;
+    }
+
+    .signed-value {
+        font-size: 2rem;
+    }
+
+    .stTabs [data-baseweb="tab-list"] {
+        max-width: 100%;
+        overflow-x: auto;
+        scrollbar-width: thin;
+    }
+
+    .stTabs [data-baseweb="tab"] {
+        flex: 0 0 auto;
+        font-size: 0.82rem;
+        padding: 0.55rem 0.8rem;
+        white-space: nowrap;
+    }
+
+    div[data-testid="stDataFrame"] {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+
+    div[data-testid="stPageLink-NavLink"] {
+        min-height: 2.75rem;
+        padding: 0.75rem 0.85rem;
+    }
+
+    div[data-testid="stPageLink-NavLink"] p {
+        font-size: 0.86rem;
+        overflow-wrap: anywhere;
+    }
+
+    .footer-text {
+        margin-top: 1.5rem;
+        font-size: 0.72rem;
+        overflow-wrap: anywhere;
+    }
+}
+
+@media (max-width: 480px) {
+    .block-container {
+        padding-left: 0.65rem;
+        padding-right: 0.65rem;
+    }
+
+    .gov-badge {
+        font-size: 0.7rem;
+        white-space: normal;
+    }
+
+    .ai-insight-body,
+    .gov-info-box {
+        font-size: 0.84rem;
+        line-height: 1.6;
+    }
+
+    .ai-tag {
+        margin-bottom: 0.35rem;
+    }
 }

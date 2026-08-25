@@ -120,6 +120,7 @@ def create_overview_map(predictions: dict) -> folium.Map:
         background: white; padding: 10px 14px; border-radius: 8px;
         border: 1px solid #dee2e6; font-family: Pretendard, sans-serif; font-size: 12px;">
         <b>다음 해 예측 순이동률</b><br>
+        <span style="color:#666;">전입자와 전출자의 차이를 인구 대비 비율로 나타낸 지표</span><br>
         <span style="color:#dc2626;">■</span> 순유출(감소) &nbsp;
         <span style="color:#0055aa;">■</span> 순유입(증가)
     </div>

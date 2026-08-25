@@ -45,7 +45,7 @@ if not _ICON_PATH.exists():
 page_icon = str(_ICON_PATH) if _ICON_PATH.exists() else ":material/account_balance:"
 
 st.set_page_config(
-    page_title="충북 지역소멸 대응 AI 시뮬레이터",
+    page_title="충청지역 지역소멸 대응 AI 시뮬레이터",
     page_icon=page_icon,
     layout="wide",
     initial_sidebar_state="expanded",
@@ -56,7 +56,7 @@ st.markdown(f"<style>{_CSS_PATH.read_text(encoding='utf-8')}</style>", unsafe_al
 
 st.markdown("""
 <div class="gov-header-container">
-    <span class="gov-badge">충청북도 데이터 기반 정책 지원 시스템</span>
+    <span class="gov-badge">충청지역 데이터 기반 정책 지원 시스템</span>
     <h1 class="gov-header-title">읍·면·동 단위 지역소멸 대응 AI 시뮬레이터</h1>
     <p class="gov-header-sub">인구감소지역 미세 분석 및 What-if 정책 시나리오 비교·분석 플랫폼</p>
 </div>
@@ -69,7 +69,7 @@ pg.run()
 
 st.markdown("""
 <div class="footer-text">
-    충북 지역소멸 대응 AI 시뮬레이터 (MVP) · KHUDA OB 심화 프로젝트<br>
+    충청지역소멸 대응 AI 시뮬레이터 (MVP) · KHUDA OB 심화 프로젝트<br>
     본 시스템의 분석 결과는 AI 모델 기반 시뮬레이션이며, 정책 결정의 참고 자료로만 활용하시기 바랍니다.
 </div>
 """, unsafe_allow_html=True)
