@@ -15,6 +15,7 @@ def render() -> None:
     sigu, dong, region_code = selected["sigu"], selected["dong"], selected["region_code"]
 
     region_result = ai.get_region_result(region_code)
+    base_year = region_result["region"]["year"]
     population = region_result["population"]
     accessibility = region_result["accessibility"]
     living_area = region_result["living_area"]
@@ -24,6 +25,7 @@ def render() -> None:
     st_folium(m, width=None, height=460, returned_objects=[])
 
     st.markdown(f"<div class='gov-section-title'> {dong} 인구구조</div>", unsafe_allow_html=True)
+    st.caption(f"기준 데이터: {base_year}년")
     render_metric_row([
         ("총 인구", f"{int(population['총인구']):,}", "명"),
         ("청년 비율", f"{population['청년비율']:.1f}", "%"),

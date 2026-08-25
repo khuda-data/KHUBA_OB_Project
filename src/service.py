@@ -16,12 +16,15 @@ def get_region_result(
     """Return frontend-ready regional status and prediction for one region code."""
     summary = get_region_summary(latest_df, region_code)
     prediction = predict_region(model, latest_df, region_code, features)
+    base_year = int(summary["region"]["year"])
 
     result = {
         **summary,
         "prediction": {
             "target": str(target),
             "value": float(prediction["prediction"]),
+            "base_year": base_year,
+            "prediction_year": base_year + 1,
         },
     }
 
