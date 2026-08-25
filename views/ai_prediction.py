@@ -3,8 +3,9 @@
 import streamlit as st
 
 import ai_module as ai
-from components.charts import make_shap_chart, pretty
+from components.charts import PLOTLY_CONFIG, make_shap_chart, pretty
 from components.insight_box import ai_insight_box
+from components.metric_card import render_signed_value
 from state import get_selected_region
 
 
@@ -23,38 +24,31 @@ def render() -> None:
     col_pred, col_shap = st.columns(2)
 
     with col_pred:
-        st.markdown('<div class="gov-card" style="height:100%;">', unsafe_allow_html=True)
-        st.markdown("**다음 해 순이동률 예측**")
-        st.metric(
-            label="예측 순이동률",
-            value=f"{pred_val:+.2f}%",
-            delta=f"{pred_val:+.2f}%p",
-            delta_color="inverse",
-        )
-        status = "순유출 (인구 감소 예측)" if pred_val < 0 else "순유입 (인구 증가 예측)"
-        status_color = "#dc2626" if pred_val < 0 else "#16a34a"
-        st.markdown(
-            f'<span style="color:{status_color}; font-weight:700;">{status}</span>',
-            unsafe_allow_html=True,
-        )
-        st.caption(f"예측 모델: XGBoost Regressor · 타깃: {region_result['prediction']['target']}")
-        st.markdown('</div>', unsafe_allow_html=True)
+        with st.container(border=True):
+            st.markdown("**다음 해 순이동률 예측**")
+            status = "순유입 (인구 증가 예측)" if pred_val >= 0 else "순유출 (인구 감소 예측)"
+            arrow = "▲" if pred_val >= 0 else "▼"
+            render_signed_value(
+                value_text=f"{pred_val:+.2f}%",
+                is_positive=pred_val >= 0,
+                badge_text=f"{arrow} {status}",
+                caption=f"예측 모델: XGBoost Regressor · 타깃: {region_result['prediction']['target']}",
+            )
 
     with col_shap:
-        st.markdown('<div class="gov-card" style="height:100%;">', unsafe_allow_html=True)
-        st.markdown(f"**SHAP 영향 요인 분석 (상위 {len(top_features)}개 변수)**")
-        for item in top_features:
-            sign = "+" if item["shap_value"] >= 0 else ""
-            color = "#0055aa" if item["shap_value"] >= 0 else "#dc2626"
-            st.markdown(
-                f"<div style='display:flex; justify-content:space-between; padding:0.3rem 0; "
-                f"border-bottom:1px solid #f1f5f9;'>"
-                f"<span>{pretty(item['feature'])}</span>"
-                f"<span style='color:{color}; font-weight:700;'>{sign}{item['shap_value']:.3f}</span>"
-                f"</div>",
-                unsafe_allow_html=True,
-            )
-        st.markdown('</div>', unsafe_allow_html=True)
+        with st.container(border=True):
+            st.markdown(f"**SHAP 영향 요인 분석 (상위 {len(top_features)}개 변수)**")
+            for item in top_features:
+                sign = "+" if item["shap_value"] >= 0 else ""
+                color = "#0055aa" if item["shap_value"] >= 0 else "#dc2626"
+                st.markdown(
+                    f"<div style='display:flex; justify-content:space-between; padding:0.3rem 0; "
+                    f"border-bottom:1px solid #f1f5f9;'>"
+                    f"<span>{pretty(item['feature'])}</span>"
+                    f"<span style='color:{color}; font-weight:700;'>{sign}{item['shap_value']:.3f}</span>"
+                    f"</div>",
+                    unsafe_allow_html=True,
+                )
 
     top_feature = top_features[0]
     direction = "낮추는" if top_feature["shap_value"] < 0 else "높이는"
@@ -73,6 +67,7 @@ def render() -> None:
 
     with st.expander("충북 전체 지역 기준 Global SHAP 보기"):
         global_shap = ai.get_global_shap(top_k=8)
-        global_shap_dict = {item["feature"]: item["mean_shap"] for item in global_shap["top_features"]}
-        fig_global = make_shap_chart(global_shap_dict, "충북 전체 — 모델 예측 기여도")
-        st.plotly_chart(fig_global, width="stretch")
+        # 양/음이 상쇄되는 mean_shap이 아닌, 절대값 평균(mean_abs_shap)으로 피처 중요도를 표시한다.
+        global_shap_dict = {item["feature"]: item["mean_abs_shap"] for item in global_shap["top_features"]}
+        fig_global = make_shap_chart(global_shap_dict, "충북 전체 — 모델 예측 기여도(절대값 평균)")
+        st.plotly_chart(fig_global, use_container_width=True, config=PLOTLY_CONFIG)

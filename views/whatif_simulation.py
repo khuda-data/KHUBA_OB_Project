@@ -1,11 +1,12 @@
-"""'시뮬레이션' 페이지 — What-if 정책 변수 설정 + 시나리오 비교 + AI 제언."""
+"""'시뮬레이션' 페이지 — What-if 정책 변수 설정 + 시나리오 비교 + 시나리오별 비교 해석."""
 
 import pandas as pd
 import streamlit as st
 
 import ai_module as ai
-from components.charts import make_whatif_comparison_chart, pretty
+from components.charts import PLOTLY_CONFIG, make_whatif_comparison_chart, pretty
 from components.insight_box import ai_insight_box, info_box
+from components.metric_card import render_signed_value
 from state import get_selected_region
 
 
@@ -22,17 +23,16 @@ def render() -> None:
     col_setting, col_chart = st.columns([1, 1.2])
 
     with col_setting:
-        st.markdown('<div class="gov-card">', unsafe_allow_html=True)
-        st.markdown("**정책 변수 설정**")
-        st.caption("시뮬레이션에 적용할 정책 변수와 개선율을 선택하세요.")
+        with st.container(border=True):
+            st.markdown("**정책 변수 설정**")
+            st.caption("시뮬레이션에 적용할 정책 변수와 개선율을 선택하세요.")
 
-        target_feature = st.selectbox(
-            "개선 정책 변수", ai.WHATIF_FEATURES, format_func=pretty, key="whatif_feature",
-        )
-        rate_option = st.select_slider(
-            "개선율", options=[10, 20, 30], value=20, format_func=lambda x: f"{x}%", key="whatif_rate",
-        )
-        st.markdown('</div>', unsafe_allow_html=True)
+            target_feature = st.selectbox(
+                "개선 정책 변수", ai.WHATIF_FEATURES, format_func=pretty, key="whatif_feature",
+            )
+            rate_option = st.select_slider(
+                "개선율", options=[10, 20, 30], value=20, format_func=lambda x: f"{x}%", key="whatif_rate",
+            )
 
     scenarios = ai.run_what_if_scenarios(region_code, target_feature)
     rate_to_scenario = {round(s["improvement_rate"] * 100): s for s in scenarios}
@@ -44,19 +44,25 @@ def render() -> None:
     scenario_values = {round(s["improvement_rate"] * 100): s["whatif_prediction"] for s in scenarios}
 
     with col_chart:
-        st.markdown('<div class="gov-card">', unsafe_allow_html=True)
-        st.markdown("**시나리오별 예측 순이동률 변화**")
-        fig = make_whatif_comparison_chart(base_pred, scenario_values, target_feature)
-        st.plotly_chart(fig, width="stretch")
-        st.markdown('</div>', unsafe_allow_html=True)
+        with st.container(border=True):
+            st.markdown("**시나리오별 예측 순이동률 변화**")
+            fig = make_whatif_comparison_chart(base_pred, scenario_values, target_feature)
+            st.plotly_chart(fig, use_container_width=True, config=PLOTLY_CONFIG)
 
-    val_c1, val_c2, val_c3 = st.columns(3)
-    with val_c1:
-        st.metric("기존 예측값", f"{base_pred:+.2f}%")
-    with val_c2:
-        st.metric("정책 적용 후", f"{after_pred:+.2f}%")
-    with val_c3:
-        st.metric("변화량", f"{diff:+.2f}%p", delta=f"{diff:+.2f}%p")
+    result_c1, result_c2 = st.columns(2)
+    with result_c1:
+        with st.container(border=True):
+            st.markdown("**기존 예측값**")
+            render_signed_value(value_text=f"{base_pred:+.2f}%", is_positive=base_pred >= 0)
+    with result_c2:
+        with st.container(border=True):
+            st.markdown("**정책 적용 후**")
+            render_signed_value(
+                value_text=f"{after_pred:+.2f}%",
+                is_positive=after_pred >= 0,
+                badge_text=f"변화량 {diff:+.2f}%p",
+                badge_positive=diff >= 0,
+            )
 
     st.caption(
         f"{pretty(target_feature)}: "
@@ -88,16 +94,16 @@ def render() -> None:
     if best_scenario["change"] > 0:
         recommendation = (
             f"현재 데이터 기반 분석 결과, <b>{pretty(target_feature)}을(를) {best_rate}% 개선</b>하는 조건에서 "
-            f"예측 순이동률이 <b>{best_scenario['change']:+.2f}%p</b>로 가장 크게 개선되는 것으로 나타났습니다."
+            f"예측 순이동률이 <b>{best_scenario['change']:+.2f}%p</b>로 가장 긍정적인 변화를 보이는 시나리오로 해석됩니다."
         )
     else:
         recommendation = (
             f"선택한 조건({pretty(target_feature)})에서는 10~30% 개선 시나리오 모두 예측 순이동률 개선 효과가 "
-            f"뚜렷하게 나타나지 않았습니다. 다른 정책 변수도 함께 비교해 보세요."
+            f"뚜렷하게 나타나지 않는 것으로 해석됩니다. 다른 정책 변수도 함께 비교해 보세요."
         )
 
     ai_insight_box(
-        title="AI 최적 정책 제언",
+        title="모델 기반 시뮬레이션 분석",
         body_html=recommendation + " 이는 '정책 인과효과'가 아닌 모델 기반 민감도 분석 결과이며, 실제 정책 시행 효과와는 차이가 있을 수 있습니다.",
         tags=[pretty(target_feature).replace(" ", "_"), f"{best_rate}%_개선"],
     )

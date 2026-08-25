@@ -238,6 +238,53 @@ html, body, [class*="css"] {
     color: #ffffff;
 }
 
+/* ── 부호 강조 큰 숫자 (예측값 등) ── */
+.signed-value {
+    font-size: 2.4rem;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+.signed-value-badge {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    margin-top: 0.4rem;
+}
+
+.metric-caption {
+    font-size: 0.78rem;
+    color: #777777;
+    margin-top: 0.5rem;
+}
+
+/* ── 같은 행에 나란히 놓인 카드(st.container(border=True))의 높이를 맞춘다 ── */
+div[data-testid="stHorizontalBlock"] {
+    align-items: stretch;
+}
+
+div[data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] {
+    display: flex;
+}
+
+div[data-testid="stColumn"] > div[data-testid="stVerticalBlock"] {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+div[data-testid="stColumn"] div[data-testid="stLayoutWrapper"] {
+    flex: 1;
+    display: flex;
+}
+
+div[data-testid="stColumn"] div[data-testid="stLayoutWrapper"] > div {
+    width: 100%;
+}
+
 .footer-text {
     margin-top: 2rem;
     padding-top: 1rem;

@@ -2,10 +2,20 @@
 
 import plotly.graph_objects as go
 
+PLOTLY_CONFIG = {"displayModeBar": False}
+
 
 def pretty(feature: str) -> str:
     """피처명(언더스코어)을 화면 표시용 라벨로 변환."""
     return feature.replace("_", " ")
+
+
+def _padded_range(values: list, pad_ratio: float = 0.35, min_pad: float = 0.3) -> list:
+    """막대/텍스트 라벨이 잘리지 않도록 min/max에 여유를 준 축 범위 계산."""
+    vmin, vmax = min(values), max(values)
+    span = vmax - vmin
+    pad = max(span * pad_ratio, min_pad)
+    return [vmin - pad, vmax + pad]
 
 
 def make_shap_chart(shap_data: dict, title: str = "") -> go.Figure:
@@ -18,10 +28,11 @@ def make_shap_chart(shap_data: dict, title: str = "") -> go.Figure:
         x=values,
         y=features,
         orientation="h",
-        marker_color=colors,
+        marker=dict(color=colors, cornerradius=6),
         text=[f"{v:+.3f}" for v in values],
         textposition="outside",
         textfont=dict(size=12, family="Pretendard"),
+        hovertemplate="<b>%{y}</b><br>SHAP: %{x:+.3f}<extra></extra>",
     ))
     fig.update_layout(
         title=dict(text=title, font=dict(size=14, family="Pretendard")),
@@ -32,8 +43,9 @@ def make_shap_chart(shap_data: dict, title: str = "") -> go.Figure:
         plot_bgcolor="rgba(0,0,0,0)",
         paper_bgcolor="rgba(0,0,0,0)",
         font=dict(family="Pretendard"),
-        xaxis=dict(zeroline=True, zerolinecolor="#cbd5e1", gridcolor="#f1f5f9"),
-        yaxis=dict(gridcolor="#f1f5f9"),
+        xaxis=dict(zeroline=True, zerolinecolor="#cbd5e1", showgrid=False),
+        yaxis=dict(showgrid=False),
+        hoverlabel=dict(bgcolor="white", font_size=12, font_family="Pretendard"),
     )
     return fig
 
@@ -47,10 +59,11 @@ def make_whatif_comparison_chart(base: float, scenario_values: dict, feature: st
     fig = go.Figure(go.Bar(
         x=labels,
         y=values,
-        marker_color=colors,
+        marker=dict(color=colors, cornerradius=6),
         text=[f"{v:+.2f}%" for v in values],
         textposition="outside",
         textfont=dict(size=13, family="Pretendard", color="#1e293b"),
+        hovertemplate="<b>%{x}</b><br>예측 순이동률: %{y:+.2f}%<extra></extra>",
     ))
     fig.update_layout(
         title=dict(
@@ -58,11 +71,13 @@ def make_whatif_comparison_chart(base: float, scenario_values: dict, feature: st
             font=dict(size=14, family="Pretendard"),
         ),
         yaxis_title="예측 순이동률 (%)",
-        height=300,
-        margin=dict(l=10, r=20, t=50, b=30),
+        height=320,
+        margin=dict(l=10, r=20, t=60, b=40),
         plot_bgcolor="rgba(0,0,0,0)",
         paper_bgcolor="rgba(0,0,0,0)",
         font=dict(family="Pretendard"),
-        yaxis=dict(gridcolor="#f1f5f9", zeroline=True, zerolinecolor="#cbd5e1"),
+        yaxis=dict(showgrid=True, gridcolor="#f1f5f9", zeroline=True, zerolinecolor="#cbd5e1",
+                   range=_padded_range(values)),
+        hoverlabel=dict(bgcolor="white", font_size=12, font_family="Pretendard"),
     )
     return fig

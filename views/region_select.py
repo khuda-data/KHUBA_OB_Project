@@ -18,7 +18,19 @@ def render() -> None:
     st_folium(m, width=None, height=520, returned_objects=[])
 
     selected = get_selected_region()
-    st.info(f"현재 선택된 지역: **{selected['sigu']} {selected['dong']}** — 상단 '현황 분석' / 'AI 예측' / '시뮬레이션' 탭에서 상세 내용을 확인하세요.")
+    with st.container(border=True):
+        st.markdown(f"현재 선택된 지역: **{selected['sigu']} {selected['dong']}** — 아래 버튼을 눌러 상세 내용을 확인하세요.")
+        pages = st.session_state.get("nav_pages", {})
+        link_c1, link_c2, link_c3 = st.columns(3)
+        with link_c1:
+            if "status" in pages:
+                st.page_link(pages["status"], label="현황 분석", icon=":material/query_stats:")
+        with link_c2:
+            if "ai-prediction" in pages:
+                st.page_link(pages["ai-prediction"], label="AI 예측", icon=":material/smart_toy:")
+        with link_c3:
+            if "simulation" in pages:
+                st.page_link(pages["simulation"], label="시뮬레이션", icon=":material/tune:")
 
     st.markdown('<div class="gov-section-title"> 시·군별 예측 요약</div>', unsafe_allow_html=True)
 
