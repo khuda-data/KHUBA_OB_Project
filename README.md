@@ -1,8 +1,7 @@
-# 충청지역 지역소멸 대응 AI 시뮬레이터 (MVP)
+# 충북 지역소멸 대응 AI 시뮬레이터 (MVP)
 
 충청북도 읍·면·동 단위 지역소멸 대응을 위한 AI 기반 정책 시뮬레이션 웹 애플리케이션입니다.
-AI 예측 / SHAP / What-if 계산은 공동 레포 [khuda-data/KHUBA_OB_Project](https://github.com/khuda-data/KHUBA_OB_Project) `main`에
-머지된 메인개발 1의 서비스 레이어(`src/`)를 그대로 연동합니다.
+AI 예측 / SHAP / What-if 계산은 `src/`의 AI 예측·SHAP·What-if 서비스 레이어를 통해 실행합니다.
 
 UI는 `UI_Ref/*/DESIGN.md` + `code.html`/`screen.png` 목업(상단 탭 네비게이션 + 좌측 "분석 필터" 사이드바)을
 Streamlit 네이티브 멀티페이지(`st.navigation(position="top")`)로 재현했습니다. 목업에 있던 로그인 버튼,
@@ -62,7 +61,7 @@ MVP/
 ├── assets/
 │   └── styles.css                # 전역 CSS 한 곳에 모음 (UI_Ref/*/DESIGN.md 색상 토큰 기반)
 │
-├── src/                    # 공동 레포 main에서 머지된 AI 서비스 레이어 (그대로 vendored, 직접 수정 X)
+├── src/                    # AI 예측·SHAP·What-if 서비스 레이어
 │   ├── data_loader.py       # 모델 번들 / 지역 데이터 로딩, build_latest_region_data()
 │   ├── region_service.py    # 시군·읍면동 조회, 지역 현황(get_region_summary)
 │   ├── inference.py         # AI 예측 (predict_region)
@@ -105,7 +104,7 @@ MVP/
 - `get_global_shap()`는 학습 전체 데이터가 아니라 `build_latest_region_data()`로 만든 지역별 최신 데이터 146개 행을 기준으로 Global SHAP 요약을 계산한다. 화면에는 양/음이 상쇄되지 않도록 `mean_abs_shap`을 표시한다.
 
 **`components/sidebar.py`**
-- 상단에 "충청지역 전체 보기" 페이지 이동 링크, 시·군/읍·면·동 `selectbox` 2개, 인구감소지역 여부 배지를 렌더링한다.
+- 상단에 "충북 전체 보기" 페이지 이동 링크, 시·군/읍·면·동 `selectbox` 2개, 인구감소지역 여부 배지를 렌더링한다.
 - 배지에는 `st.caption(..., help=...)`으로 Streamlit 네이티브 툴팁(물음표 아이콘)을 달아, 판정 기준(행정안전부 2021년 10월 지정 충북 6곳)을 hover로 볼 수 있다.
 
 **`components/metric_card.py`**
@@ -130,8 +129,8 @@ MVP/
 - `DEPOPULATION_AREAS`: 인구감소지역 6곳(제천시·보은군·옥천군·영동군·괴산군·단양군) 하드코딩 목록 — 행정안전부가 2021년 10월 전국 최초로 지정한 89개 인구감소지역 중 충청북도 해당 지역과 일치한다. AI 예측값과는 무관한 고정 값이라, 이후 행정안전부가 지정 목록을 갱신했다면 반영되어 있지 않을 수 있다.
 - `SIGUNGU_TO_SGGNM`: AI 데이터의 "청주시"(통합 표기)를 GeoJSON의 4개 구(상당·서원·흥덕·청원)로 매핑.
 
-**`src/` (vendored AI 서비스 레이어)**
-- 공동 레포 `khuda-data/KHUBA_OB_Project`의 `main`에서 머지된 코드를 그대로 가져왔다. 로컬 Python 3.9 호환을 위해 각 파일 맨 위에 `from __future__ import annotations` 한 줄만 추가했고(동작 변경 없음), 그 외 로직은 원본 그대로다.
+**`src/` (AI 예측·SHAP·What-if 서비스 레이어)**
+- 모델/데이터 로딩, 지역 조회, 다음 해 순이동률 예측, SHAP 모델 예측 기여도, 모델 기반 What-if 민감도 분석, 대표 시나리오 실행을 담당한다.
 
 ---
 
@@ -271,8 +270,7 @@ KHUDA OB 심화 프로젝트
 ## 10. 주의사항
 
 - `ai_module.py`는 AI 서비스 레이어(`src/`)를 그대로 호출하는 얇은 어댑터이며, Stub이 아니다.
-- `src/`는 공동 레포에서 머지된 코드를 그대로 vendoring한 것이며, 로컬 Python 3.9 호환을 위해
-  각 파일 맨 위에 `from __future__ import annotations` 한 줄만 추가했다(동작 변경 없음).
+- `src/`는 AI 예측·SHAP·What-if 서비스 레이어이며, Streamlit UI는 `ai_module.py`를 통해 이 함수들을 호출한다.
 - 지도 표시 지역코드(GeoJSON `adm_cd2`)와 AI 데이터의 `지역코드`는 1:1로 매칭된다(146/153개 읍면동에 AI 데이터 존재).
 - 모든 What-if 해석 문구는 **인과관계를 직접 단정하지 않는다** ("모델 기반 민감도 분석"으로 표현).
 - SHAP은 **"모델 예측 기여도"**로 표현하며, 원인으로 해석하지 않는다.

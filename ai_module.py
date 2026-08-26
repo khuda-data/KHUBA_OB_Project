@@ -1,13 +1,12 @@
 """
 AI 서비스 레이어 어댑터
 ──────────────────────────────────────────────
-공동 레포(khuda-data/KHUBA_OB_Project) main 브랜치에 머지된
-메인개발 1의 src.* 서비스 함수를 Streamlit 앱이 쓰기 편한 형태로 감싼 얇은 어댑터입니다.
+src.* AI 서비스 함수를 Streamlit 앱이 쓰기 편한 형태로 감싼 얇은 어댑터입니다.
 
 - 모델 번들(final_model.pkl)과 최신 지역 데이터(src.data_loader.build_latest_region_data)는
   프로세스당 1회만 로드해 st.cache_resource로 캐싱합니다.
 - 지역코드/시군/읍면동 조회, 예측, SHAP, What-if 계산은 모두 src.* 함수를 그대로 호출합니다.
-  반환 형식은 AI_Service_Layer_Integration_Guide.md 및 src/README.md 기준을 따릅니다.
+  반환 형식은 README.md의 서비스 레이어 설명을 따릅니다.
 """
 
 import streamlit as st
