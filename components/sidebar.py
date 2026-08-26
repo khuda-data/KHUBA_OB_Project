@@ -18,7 +18,7 @@ def render_sidebar_filters() -> None:
         st.markdown("""
         <div class="sidebar-title">
             <span class="sidebar-title-main">분석 필터</span>
-            <span class="sidebar-title-sub">충북 지역소멸 대응</span>
+            <span class="sidebar-title-sub">충청지역 지역소멸 대응</span>
         </div>
         """, unsafe_allow_html=True)
 
@@ -26,7 +26,7 @@ def render_sidebar_filters() -> None:
         if "region-select" in pages:
             st.page_link(
                 pages["region-select"],
-                label="충북 전체 보기",
+                label="충청지역 전체 보기",
                 icon=":material/map:",
             )
 

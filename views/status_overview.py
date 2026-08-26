@@ -20,7 +20,7 @@ def render() -> None:
     accessibility = region_result["accessibility"]
     living_area = region_result["living_area"]
 
-    st.markdown('<div class="gov-section-title"> 충북 읍·면·동 지도</div>', unsafe_allow_html=True)
+    st.markdown('<div class="gov-section-title"> 충청지역 읍·면·동 지도</div>', unsafe_allow_html=True)
     m = create_region_map(sigu, dong, region_code)
     st_folium(m, width=None, height=460, returned_objects=[])
 

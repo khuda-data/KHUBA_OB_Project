@@ -78,7 +78,7 @@ def render() -> None:
     )
 
     with st.expander("지역별 최신 데이터 기준 Global SHAP 보기"):
-        st.caption("현재 분석 대상 충북 읍·면·동의 지역별 최신 데이터에서 산출한 모델 예측 기여도의 절대값 평균입니다.")
+        st.caption("현재 분석 대상 충청지역 읍·면·동의 지역별 최신 데이터에서 산출한 모델 예측 기여도의 절대값 평균입니다.")
         global_shap = ai.get_global_shap(top_k=8)
         # 양/음이 상쇄되는 mean_shap이 아닌, 절대값 평균(mean_abs_shap)으로 피처 중요도를 표시한다.
         global_shap_dict = {item["feature"]: item["mean_abs_shap"] for item in global_shap["top_features"]}
