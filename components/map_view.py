@@ -10,7 +10,7 @@ def create_region_map(selected_sigu: str, selected_dong: str, region_code: int) 
     target_coords = get_region_coords(region_code)
     selected_code = str(region_code)
 
-    m = folium.Map(location=target_coords, tiles="cartodbpositron", control_scale=True)
+    m = folium.Map(location=target_coords, tiles="OpenStreetMap", control_scale=True)
     m.fit_bounds(get_region_bounds(region_code), padding=(40, 40))
 
     sigu_geo = get_sigu_geojson(selected_sigu)
@@ -87,7 +87,7 @@ def create_overview_map(predictions: dict) -> folium.Map:
     values = list(predictions.values())
     vmin, vmax = min(values), max(values)
 
-    m = folium.Map(location=CHUNGBUK_CENTER, zoom_start=9, tiles="cartodbpositron", control_scale=True)
+    m = folium.Map(location=CHUNGBUK_CENTER, zoom_start=9, tiles="OpenStreetMap", control_scale=True)
 
     def style_function(feature):
         code = int(feature["properties"]["adm_cd2"])
